@@ -1,0 +1,255 @@
+---
+layout: none
+title: "Was > Wie"
+---
+<!doctype html>
+<html lang="de">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>Was > Wie</title>
+
+    <meta name="author" content="Michael Muhr">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.1.0/dist/reset.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.1.0/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.1.0/dist/theme/black.css" id="theme">
+
+    <!-- Theme used for syntax highlighted code -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.1.0/plugin/highlight/monokai.css" id="highlight-theme">
+
+    <style type="text/css">
+      .highlight { color: #42affa; }
+      ul.faded li::marker { color: #1d4967; }
+      ul.faded li ul { 
+        list-style: none; 
+        font-size: smaller;
+      }
+      p.faded {
+        color: #444444;
+        font-size: small;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section>
+          <p>Software Entwicklung</p>
+          <h1><span class="highlight">Was</span> &gt; <span class="highlight">Wie</span></h1>
+        </section>
+
+        <section>
+          <ul class="faded">
+            <li><p>Für SW Entwickler spannend ist das <span class="highlight">Wie</span></p></li>
+            <li><p class="fragment">Das <span class="highlight">Was</span> ist jedoch was mehr Gewicht und Bestand hat</p></li>
+            <li><p class="fragment">Wie gehen wir damit um?</p></li>
+          </ul>
+        </section>
+
+        <section>
+          <p>Basis Werkzeuge um das <span class="highlight">Was</span> festzuhalten:</p>
+          <ul class="faded">
+            <li><p class="fragment">Namen</p></li>
+            <li><p class="fragment">Gruppierung (Kontext geben)</p></li>
+            <li><p class="fragment">Kommentare</p></li>
+          </ul>
+        </section>
+
+        <section>
+          <p class="faded">Von Unten nach Oben..</p>
+          <h3>Typen und Operatoren</h3>
+          <ul class="faded">
+            <li>
+              <span class="fragment">
+                <p>int</p>
+                <ul>
+                  <li>das <span class="highlight">Was</span> sind die ganze Zahlen</li>
+                  <li>das <span class="highlight">Wie</span> ist teil der Sprache</li>
+                </ul>
+              </span>
+            </li>
+            <li>
+              <span class="fragment">
+                <p>+</p>
+                <ul>
+                  <li>das <span class="highlight">Was</span> ist Addition</li>
+                  <li>das <span class="highlight">Wie</span> ist teil der Sprache</li>
+                </ul>
+              </span>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <p class="faded">Von Unten nach Oben..</p>
+          <h3>Funktionen</h3>
+          <pre><code data-trim data-noescape>
+            int sum(int a, int b, int c) { 
+              return a + b + c;
+            }
+          </code></pre>
+          <ul class="faded">
+            <li>
+              <span class="fragment">
+                <p>unser <span class="highlight">Was</span> ist das Summieren von ganzen Zahlen</p>
+                <ul>
+                  <li>idealer Weise ausreichend beschrieben durch die Signatur</li>
+                </ul>
+              </span>
+            </li>
+            <li>
+              <p class="fragment">
+                das <span class="highlight">Wie</span> steht später als Block und verknüpft simple<span class="highlight">!</span> Bausteine
+              </p>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <p class="faded">Von Unten nach Oben..</p>
+          <h3>Methoden (Klassen)</h3>
+          <ul class="faded">
+            <li><p class="fragment">wie Fn aber stärkere Gruppierung über Klasse</p></li>
+            <li><p class="fragment">diese Gruppe teilt sich Kontext, mindestens ein Aufgabengebiet, potentiell aber mehr</p></li>
+            <li><p class="fragment">je mehr geteilt wird desto schwerer ist unser <span class="highlight">Was</span> zu erfassen, Signatur reicht nicht mehr</p></li>
+            <li>
+              <span class="fragment">
+                <p>das <span class="highlight">Wie</span> verknüpft Bausteine die einen aus Block-Sicht unkontrollierten Zustand haben können</p>
+                <ul>
+                  <li>"Globale Variablen", Side Effects, FP rules :D</li>
+                </ul>
+              </span>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <p class="faded">Von Unten nach Oben..</p>
+          <h3>Interface</h3>
+          <pre><code data-trim data-noescape>
+            int sum(int a, int b, int c);
+          </code></pre>
+          <ul class="faded">
+            <li>
+              <span class="fragment">
+                <p>das <span class="highlight">Was</span> steht im Vordergrund</p>
+                <ul>
+                  <li>idealer Weise ausreichend beschrieben durch die Signaturen</li>
+                </ul>
+              </span>
+            </li>
+            <li><p class="fragment">diese Gruppe teilt sich ein Aufgabengebiet</p></li>
+            <li><p class="fragment">das <span class="highlight">Wie</span> ist nebensächlich, kann mehrere verschiedene geben</p></li>
+          </ul>
+        </section>
+
+        <section>
+          <p class="faded">Von Unten nach Oben..</p>
+          <h3>Layer & Packages</h3>
+          <pre><code data-trim data-noescape>
+            // Controller, Service, Repository, Utils, ..
+          </code></pre>
+          <ul class="faded">
+            <li><p class="fragment">Orientierungshilfen wo man <span class="highlight">Was</span> findet</p></li>
+          </ul>
+        </section>
+
+        <section>
+          <p class="faded">Von Unten nach Oben..</p>
+          <h3>Test</h3>
+          <ul class="faded">
+            <li><p class="fragment">ist Funktionsnachweis, <span class="highlight">Was</span> Orientiert</p></li>
+            <li>
+              <span class="fragment">
+                <p>guter Platz um Features / Ziele / Verhalten (das <span class="highlight">Was</span>) zu dokumentieren</p>
+                <ul>
+                  <li>Testabdeckung wird zum Dokumentationsindikator</li>
+                </ul>
+              </span>
+            </li>
+            <li><p class="fragment">nutzbar als Aufgaben Verständnis Prüfer</p></li>
+            <li><p class="fragment">wird zu Software Funktions Nachschlagewerk</p></li>
+            <li>
+              <span class="fragment">
+                <p>dokumentiert Zeit & Budget Kompromisse</p>
+                <ul>
+                  <li>man kann abgrenzen was behandelt/bedacht wurde, festhalten in welchen Usecases es definiertes Verhalten gibt</li>
+                </ul>
+              </span>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <p class="faded">Von Unten nach Oben..</p>
+          <h3>Logs</h3>
+          <ul class="faded">
+            <li><p class="fragment">essenzielles Hilfsmittel beim Nachvollziehen von <span class="highlight">Was</span> passiert ist (undefiniertes Verhalten)</p></li>
+          </ul>
+        </section>
+
+        <section>
+          <p class="faded">Von Unten nach Oben..</p>
+          <h3>API Specs (OAS)</h3>
+          <ul class="faded">
+            <li><p class="fragment">wie Interface nur auf höherer Ebene</p></li>
+            <li><p class="fragment">wenn man mit API Spec anfängt kann man früh Arbeitsgruppen entkoppeln</p></li>
+          </ul>
+        </section>
+
+        <section>
+          <p class="faded">Von Unten nach Oben..</p>
+          <h3>Readme</h3>
+          <ul class="faded">
+            <li>
+              <span class="fragment">
+                <p>ein guter Ort für eine Übersicht und kurze Einleitung des <span class="highlight">Was</span></p>
+                <ul>
+                  <li>worums geht, was ist die motivation, wie gliedert sichs ein ins "große Ganze"</li>
+                </ul>
+              </span>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <p class="faded">Von Unten nach Oben..</p>
+          <h3>Changelog</h3>
+          <ul class="faded">
+            <li><p class="fragment">gutes Nachschlagewerk zu <span class="highlight">Was</span> hat sich geändert</p></li>
+          </ul>
+        </section>
+
+        <section>
+          <h3>Test + Funktions Doku Bsp?</h3>
+          <ul class="faded">
+            <li><a href="https://github.com/io-0/maja/blob/develop/src/test/java/net/io_0/maja/mapping/MapFromJsonTests.java">MapFromJsonTests.java</a></li>
+            <li><a href="https://github.com/io-0/maja/blob/develop/src/main/java/net/io_0/maja/mapping/Mapper.java">Mapper.java</a></li>
+          </ul>
+        </section>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.1.0/dist/reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.1.0/plugin/notes/notes.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.1.0/plugin/markdown/markdown.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.1.0/plugin/highlight/highlight.js"></script>
+    <script>
+      // More info about initialization & config:
+      // - https://revealjs.com/initialization/
+      // - https://revealjs.com/config/
+      Reveal.initialize({
+        slideNumber: "c/t",
+        controlsTutorial: false,
+        hash: true,
+
+        // Learn about plugins: https://revealjs.com/plugins/
+        plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+      });
+    </script>
+  </body>
+</html>
