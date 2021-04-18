@@ -1,7 +1,7 @@
 # Reactive Builder
 This document shows a solution to a problem I encountered. The solution is written as a test in JAVA.
 ## Problem
-I have to compile data from multiple reactive services.
+I have to compile data from multiple reactive services. One requires data from another, so `Mono.zip(..)` won't work. 
 ## Solution
 I use the builder pattern mixed with flatMap's:
 
@@ -46,7 +46,7 @@ class Tests {
   }
 
   private Function<ContainerBuilder, Mono<ContainerBuilder>> task2() {
-    return container -> serviceB.map(container::b); // same as task1, just shorter
+    return container -> serviceB(container.a).map(container::b); // same as serviceA.map(..), just shorter
   }
 
   private Function<ContainerBuilder, Mono<ContainerBuilder>> task3(String name) {
@@ -55,7 +55,7 @@ class Tests {
 
   // Simulate services
   Mono<String> serviceA = Mono.just("Hello").delayElement(Duration.ofMillis(2));
-  Mono<String> serviceB = Mono.just("there").delayElement(Duration.ofMillis(5));
+  Mono<String> serviceB(String context) { return Mono.justOrEmpty("Hello".equals(context)? "there" : null); }
   Mono<String> serviceC(String name) { return Mono.just(name).delayElement(Duration.ofMillis(3)); }
 }
 ```
