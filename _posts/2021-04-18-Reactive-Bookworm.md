@@ -3,19 +3,24 @@ This document shows a solution to a problem I encountered. The solution is writt
 ## Problem
 I have to compile a small amount of data from a reactive pageinated source.
 ## Solution
-I flatMap in a recursive manner:
+I dot it in a recursive manner:
 
 ```java
 package at.io_0.examples;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Mono;
+
 import java.time.Duration;
-import java.util.*;
-import java.util.function.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 class Tests {
@@ -31,20 +36,18 @@ class Tests {
   }
 
   Mono<List<Word>> readAllPages(String bookTitle) {
-    return getAllWords(bookTitle)
-      .apply(Mono.just(new AggregateWordsOnPagesContext()))
+    return addAllWordsOfCurrentPageToContext(new AggregateWordsOnPagesContext(bookTitle))
+      .expand(this::addAllWordsOfCurrentPageToContext) // mono recursion => flux
+      .last()
       .map(ctx -> ctx.aggregatedWords);
   }
 
-  private UnaryOperator<Mono<AggregateWordsOnPagesContext>> getAllWords(String bookTitle) {
-    return mono -> mono.flatMap(ctx -> {
-      if (lastPageWasEmpty(ctx)) {
-        return Mono.just(ctx);
-      }
-
-      return getAllWords(bookTitle)
-        .apply(serviceCallToGetPage(bookTitle, ctx.currentPage).map(addPageToContext(ctx)));
-    });
+  private Mono<AggregateWordsOnPagesContext> addAllWordsOfCurrentPageToContext(AggregateWordsOnPagesContext ctx) {
+    if (lastPageWasEmpty(ctx)) {
+      return Mono.empty(); // recursion end
+    }
+    return serviceCallToGetPage(ctx)
+      .map(addPageToContext(ctx));
   }
 
   private boolean lastPageWasEmpty(AggregateWordsOnPagesContext ctx) {
@@ -56,16 +59,20 @@ class Tests {
       List<Word> words = Arrays.stream(StringUtils.split(page))
         .map(Word::new)
         .collect(Collectors.toList());
-
-      return new AggregateWordsOnPagesContext(union(ctx.aggregatedWords, words), ctx.currentPage + 1, words.size());
+      return new AggregateWordsOnPagesContext(ctx.bookTitle, union(ctx.aggregatedWords, words), ctx.currentPage + 1, words.size());
     };
   }
 
-  @NoArgsConstructor @AllArgsConstructor
+  @AllArgsConstructor
   static class AggregateWordsOnPagesContext {
+    String bookTitle;
     List<Word> aggregatedWords = new ArrayList<>();
     int currentPage = 1;
     Integer wordsOnLastPage;
+
+    public AggregateWordsOnPagesContext(String bookTitle) {
+      this.bookTitle = bookTitle;
+    }
   }
 
   @AllArgsConstructor
@@ -85,10 +92,11 @@ class Tests {
   }
 
   // Simulate services
-  Mono<String> serviceCallToGetPage(String bookTitle, int page) {
-    if (page == 1) return Mono.just("This is").delayElement(Duration.ofMillis(3));
-    if (page == 2) return Mono.just("a very").delayElement(Duration.ofMillis(5));
-    if (page == 3) return Mono.just("short story.").delayElement(Duration.ofMillis(2));
+  Mono<String> serviceCallToGetPage(AggregateWordsOnPagesContext ctx) {
+    if (!ctx.bookTitle.equals("A tiny strange Book")) throw new IllegalStateException("wrong book");
+    if (ctx.currentPage == 1) return Mono.just("This is").delayElement(Duration.ofMillis(3));
+    if (ctx.currentPage == 2) return Mono.just("a very").delayElement(Duration.ofMillis(5));
+    if (ctx.currentPage == 3) return Mono.just("short story.").delayElement(Duration.ofMillis(2));
     return Mono.just("").delayElement(Duration.ofMillis(1));
   }
 }
